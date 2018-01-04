@@ -10,34 +10,58 @@ function setCart(c) {
 }
 
 function addToCart(item) {
- var price = Math.floor(Math.random()*99)
- cart.push(new Object({[item]:price}))
- console.log(`${item} has been added to your cart.`)
- return cart
+  cart.push({[item] : Math.ceil(100*Math.random(1))});
+  console.log(`${item} has been added to your cart.`);
+  return cart;
 }
 
 function viewCart() {
-   if (cart.length === 0) {
-     console.log("Your shopping cart is empty.")
-   } else {
-     var items = [];
-     for (var i = 0; i < cart.length; i++) {
-       for (var item in cart[i]) {
-         items.push(item + " at $" + cart[i][item])
-       }
-     }
-     console.log("In your cart, you have " + items.join(", ") + ".");
-   }
- }
+  
+  if (cart.length===0) {
+    console.log("Your shopping cart is empty.");
+    return cart;
+  }
+  var txt = "In your cart, you have ";
+  var items = [];
+  for (var i in cart){
+    for (var k in cart[i]){
+      items.push(k + " at $" + cart[i][k]);
+    }
+  }
+  if (items.length == 1) txt += items[0] + ".";
+  if (items.length == 2) txt += items[0] + " and " + items[1] + ".";
+  if (items.length > 2) txt += items.slice(0,-1).join(", ") + `, and ${items[items.length-1]}.`;
+  console.log(txt);
+  return cart;
+}
 
 function total() {
-  // write your code here
+  var sum = 0;
+  for (var i in cart){
+    for (var k in cart[i]) {
+      sum += cart[i][k];
+    }
+  }
+  return sum;
 }
 
 function removeFromCart(item) {
-  // write your code here
+  for (var i in cart){
+    for (var k in cart[i]) {
+      if(k === item) {
+        cart.splice(i,1);
+        return cart;
+      }
+    }
+  }
+  console.log("That item is not in your cart.");
+  return cart;
 }
 
 function placeOrder(cardNumber) {
-  // write your code here
+  if (!cardNumber) console.log("Sorry, we don't have a credit card on file for you.");
+  var msg = `Your total cost is $${total()}, which will be charged to the card ${cardNumber}.`;
+  cart = [];
+  console.log(msg);
+  return cart;
 }
